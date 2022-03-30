@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateUserFormRequest;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class UserController extends Controller
 {
@@ -30,14 +32,13 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreUpdateUserFormRequest $request)
     {
         $data = $request->all();
-        $data = ['password'];
+        $data['password'] = bcrypt($request->password);
 
-        User::create($request->all());
+        User::create($data);
 
         return redirect()->route('users.index');
-        // return redirect()->route('users.show', $user->id)
     }
 }
