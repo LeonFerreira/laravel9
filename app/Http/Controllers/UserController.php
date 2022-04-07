@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -35,9 +36,37 @@ class UserController extends Controller
     public function store(StoreUpdateUserFormRequest $request)
     {
         $data = $request->all();
-        $data['password'] = bcrypt($request->password);
+        $data['password'] = Hash::make($request->password);
 
         User::create($data);
+
+        return redirect()->route('users.index');
+    }
+
+    public function edit($id)
+    {
+        if (!$user = User::find($id)) {
+
+            return redirect()->route( 'users.index');
+        };
+
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(StoreUpdateUserFormRequest $request, $id)
+    {
+        if (!$user = User::find($id)) {
+
+            return redirect()->route( 'users.index');
+        };
+
+        $data = $request->only('name', 'email');
+
+        if ($request->password) {
+            $data['password'] = hash::make($request->password);
+        }
+
+        $user->update($data);
 
         return redirect()->route('users.index');
     }
