@@ -55,8 +55,8 @@ class UserController extends Controller
 
     public function update(StoreUpdateUserFormRequest $request, $id)
     {
-        if (!$user = User::find($id)) {
-
+        $user = User::find($id);
+        if (!$user) {
             return redirect()->route( 'users.index');
         };
 

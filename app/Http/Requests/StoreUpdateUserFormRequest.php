@@ -13,7 +13,7 @@ class StoreUpdateUserFormRequest extends FormRequest
 
     public function rules()
     {
-        $id = $this->id ?? '';
+        $id = $this->user ?? '';
 
         $rules =  [
             'name' => [
